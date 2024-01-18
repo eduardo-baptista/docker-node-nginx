@@ -6,6 +6,8 @@ services:
     container_name: app
     networks:
       - node-nginx
+    volumes:
+      - .:/app
     depends_on:
       db:
         condition: service_healthy
