@@ -48,6 +48,9 @@ app.get('/', async (req, res) => {
     return res.send(response);
 })
 
+app.get('/health', (req, res) => {
+  return res.send('ok');
+})
 
 app.listen(3000, () => {
   console.log('Server is listening on port 3000');

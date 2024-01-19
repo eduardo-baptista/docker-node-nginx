@@ -4,10 +4,16 @@ services:
   app:
     build: .
     container_name: app
+    tty: true
     networks:
       - node-nginx
     volumes:
       - .:/app
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
     depends_on:
       db:
         condition: service_healthy
@@ -23,7 +29,8 @@ services:
     networks:
       - node-nginx
     depends_on:
-      - app
+      app:
+        condition: service_healthy
 
   db:
     image: mysql:5.7
@@ -44,7 +51,7 @@ services:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
       interval: 5s
       timeout: 5s
-      retries: 5
+      retries: 20
 
 volumes:
   db:
